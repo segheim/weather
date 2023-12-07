@@ -10,4 +10,12 @@ public interface CurrentAverageDto {
 
     Float getAvgHumidity();
 
+    void setAvgTemp(Float temp);
+
+    void setAvgWind(Float wind);
+
+    void setAvgPressure(Float pressure);
+
+    void setAvgHumidity(Float humidity);
+
 }
