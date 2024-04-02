@@ -1,34 +1,42 @@
 version: "3.8"
 
 services:
-  postgresdb:
+  db:
     image: postgres
-    restart: unless-stopped
-    env_file: ./.env
+    restart: always
     environment:
       - POSTGRES_USER=$DB_USER
       - POSTGRES_PASSWORD=$DB_ROOT_PASSWORD
       - POSTGRES_DB=$DB_DATABASE
     ports:
       - 5433:5432
+    networks:
+      - weather
     volumes:
       - db:/var/lib/postgres
+
   app:
     depends_on:
-      - postgresdb
-    build: ./build/libs/weather-0.0.1-SNAPSHOT.jar
-    restart: on-failure
+      - db
+    image: client:0.0.1
+    build:
+      context: .
+      dockerfile: Dockerfile
     env_file: ./.env
     ports:
-      - 8081:8080
+      - 9082:9082
     environment:
-      SPRING_DATASOURCE_URL: $APP_DB_URL
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/weatherhost
       SPRING_DATASOURCE_USERNAME: $DB_USER
       SPRING_DATASOURCE_PASSWORD: $DB_ROOT_PASSWORD
     volumes:
       - .m2:/root/.m2
-    stdin_open: true
-    tty: true
+    networks:
+      - weather
+
+networks:
+  weather:
 
 volumes:
   db:
+    driver: local
