@@ -1,6 +1,6 @@
 spring:
     datasource:
-        url: jdbc:postgresql://localhost:5432/weatherhost
+        url: jdbc:postgresql://localhost:5433/weatherhost
         username: postgres
         password: postgres
     jpa:
@@ -16,3 +16,5 @@ location: Minsk
 rapidapi:
     key: 3feeebc156msh11bbe10b811e416p169342jsn0b2e9c5f87a8
     host: weatherapi-com.p.rapidapi.com
+server:
+    port: 8080

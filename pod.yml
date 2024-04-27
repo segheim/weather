@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: weather
+  labels:
+    components: back
+spec:
+  containers:
+    - name: weather
+      image: segheim/weather:latest
+      ports:
+        - containerPort: 80
+      resources:
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+

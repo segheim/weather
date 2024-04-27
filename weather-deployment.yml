@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: weather-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      components: back
+  template:
+    metadata:
+      labels:
+        components: back
+    spec:
+      containers:
+        - name: weather
+          image: segheim/weather:v1
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: weather-secret
+                  key: DATABASE_URL
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: SERVER_PORT
+              value: "8080"
